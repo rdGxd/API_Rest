@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { resolve } from "path";
+import delay from "express-delay";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ const whiteList = [
   "http://34.95.191.245",
   "http://34.95.191.245:81",
   "http://localhost:3000", // -> Liberando para acesso local
+  "http://localhost:3001", // -> Liberando para acesso local
 ];
 
 // Verificando se o site tem permissão
@@ -46,13 +48,14 @@ class App {
   middlewares() {
     this.app.use(cors(corsOptions));
     this.app.use(helmet());
+    this.app.use(delay(2000));
     // A gente pode postar formulários para dentro da nossa aplicação
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     // Configurando arquivos estáticos
     this.app.use(
       "/images/",
-      express.static(resolve(__dirname, "..", "uploads", "images")),
+      express.static(resolve(__dirname, "..", "uploads", "images"))
     );
   }
 
